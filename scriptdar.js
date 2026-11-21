@@ -49,7 +49,7 @@ function renderFatwas(){
   // NAHI TO LIST DIKHAO - SIRF TITLE
   const filtered = getFiltered();
   backBtn.style.display = "none";
-  document.getElementById("status").textContent = filtered.length + " fatwa(s) found - Click to open 1";
+  document.getElementById("status").textContent = filtered.length + " فتوی یافته شد";
 
   filtered.forEach(function(f){
     const btn = document.createElement("button");
