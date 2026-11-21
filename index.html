@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>دار الإفتاء مفتی محب الله أندخویی</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="sticky" style="line-height: 1.5;">
+  <h4>بِسمِ اللّٰهِ الرَحمٰنِ الرَحِيم</h4>
+  <h5>فَاسْأَلُوا أَهْلَ الذِّكْرِ إِنْ كُنْتُمْ لَا تَعْلَمُونَ</h5>
+  <h5>[پس اگر نمی‌دانید، از اهل دانش و آگاهی بپرسید]</h5>
+  <h1 id="darHead">دار الإفتاء مفتی محب الله أندخویی</h1>
+  <p style="color:white"><small>جواب باحواله به سوالات شرعی شما</small></p>
+  <p style="color:white" id="waqt"></p>
+  <p style="color:white" id="waqt2"></p>
+  <input id="search" type="search" placeholder="جستجو سوال">
+</header>
+
+<main>
+  <div class="categories">
+    <button class="cat active" data-cat="All">کل</button>
+    <button class="cat" data-cat="Tahara">طهارة</button>
+    <button class="cat" data-cat="Salah">صلاة</button>
+    <button class="cat" data-cat="Saum">صوم</button>
+    <button class="cat" data-cat="Zakat">زکوٰة</button>
+    <button class="cat" data-cat="Nikah">نکاح</button>
+  </div>
+  <p id="status">Loading fatwas...</p>
+  <button id="backBtn">← واپس / Back to List</button>
+  <section id="fatwaList"></section>
+</main>
+<hr>
+<footer>دار الافتاء مفتی محب الله اندخویی | Developed by : <b>Muhib Ullah Andkhoyi</b></footer>
+
+<script src="scriptdar.js"></script>
+
+</body>
+</html>

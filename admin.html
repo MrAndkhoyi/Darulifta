@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Add / Edit Fatwa</title>
+<style>
+*{box-sizing:border-box} body{font-family:Arial;background:#f5f7f5;padding:12px}
+h2{text-align:center;color:#0d5d3f} input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #bbb;border-radius:7px;font-size:15px}
+textarea{height:120px} button{padding:11px 16px;border:none;border-radius:7px;cursor:pointer;font-size:15px}
+.save{background:#0d5d3f;color:white;width:100%} .down{background:#c9a227;color:white;width:100%;margin-top:10px}
+.item{background:white;border:1px solid #ddd;padding:10px;border-radius:8px;margin:8px 0}
+.item b{color:#164b37} .edit{background:#0d5d3f;color:white} .del{background:#c0392b;color:white}
+#status{font-weight:bold;text-align:center;padding:8px}
+</style>
+</head>
+<body>
+<h2>Admin - Fatwa Add / Edit</h2>
+<p id="status" style="color:orange">Loading fatwas.json... Ruko</p>
+
+<input id="FatwaID" type="number" placeholder="Fatwa No. e.g. 31">
+<input id="Question" placeholder="Sawal / Question">
+<select id="Category">
+    <option>Tahara</option><option>Salah</option><option>Saum</option><option>Zakat</option><option>Nikah</option>
+</select>
+<textarea id="Answer" placeholder="Jawab / Answer"></textarea>
+<input id="Reference" placeholder="Reference">
+<button class="save" onclick="saveFatwa()">Save Fatwa</button>
+<button class="down" onclick="showJSON()">📋 Nayi JSON Copy Karne Ke Liye Dikhao</button>
+<textarea id="jsonOutput" style="height:250px;display:none"></textarea>
+<button class="down" onclick="copyJSON()" style="display:none" id="copyBtn">Copy Karo</button>
+
+<div id="list"></div>
+
+<script>
+let fatwas = [];
+let loaded = false;
+let editId = null;
+
+// LOAD - Agar ye fail hua to save nahi hone denge
+fetch("fatwas.json?v="+Date.now())
+.then(r=>{ if(!r.ok) throw new Error("Status "+r.status); return r.json(); })
+.then(d=>{ fatwas=d; loaded=true; render(); })
+.catch(e=>{ 
+  document.getElementById("status").textContent = "❌ ERROR: fatwas.json LOAD NAHI HUI! Admin ko Simple HTTP Server se kholo, file:// se nahi. Error: " + e.message;
+  document.getElementById("status").style.color="red";
+});
+
+function render(){
+  document.getElementById("status").textContent = "✅ " + fatwas.length + " fatwe loaded - Ab add/edit kar sakte ho";
+  document.getElementById("status").style.color="green";
+  const list = document.getElementById("list"); list.innerHTML="";
+  fatwas.forEach(function(f){
+    const div = document.createElement("div"); div.className="item";
+    div.innerHTML = "<b>"+f.FatwaID+" - "+f.Question+"</b><br><small>"+f.Category+"</small><br><br>";
+    const e = document.createElement("button"); e.className="edit"; e.textContent="Edit";
+    e.onclick=function(){ editId=f.FatwaID; document.getElementById("FatwaID").value=f.FatwaID; document.getElementById("Question").value=f.Question; document.getElementById("Category").value=f.Category; document.getElementById("Answer").value=f.Answer; document.getElementById("Reference").value=f.Reference; window.scrollTo(0,0); };
+    const d = document.createElement("button"); d.className="del"; d.textContent="Delete";
+    d.onclick=function(){ if(confirm("Delete karna hai?")){ fatwas=fatwas.filter(x=>x.FatwaID!==f.FatwaID); render(); } };
+    div.appendChild(e); div.appendChild(d); list.appendChild(div);
+  });
+}
+function saveFatwa(){
+  if(!loaded){ alert("RUKO! Pehle fatwas.json load hone do. Agar ERROR aa raha hai to Simple HTTP Server se kholo."); return; }
+  const obj = { FatwaID: Number(document.getElementById("FatwaID").value), Question: document.getElementById("Question").value, Category: document.getElementById("Category").value, Answer: document.getElementById("Answer").value, Reference: document.getElementById("Reference").value };
+  if(!obj.FatwaID || !obj.Question){ alert("Fatwa No. aur Question zaroori hai"); return; }
+  if(editId!==null){ fatwas = fatwas.map(x=> x.FatwaID===editId ? obj : x); editId=null; }
+  else { 
+    // Agar same ID pehle se hai to replace karo, duplicate mat banao
+    if(fatwas.some(x=>x.FatwaID===obj.FatwaID)){ alert("Ye Fatwa No. pehle se hai! Edit use karo ya naya No. do."); return; }
+    fatwas.push(obj); 
+  }
+  fatwas.sort((a,b)=>a.FatwaID-b.FatwaID);
+  document.getElementById("FatwaID").value=""; document.getElementById("Question").value=""; document.getElementById("Answer").value=""; document.getElementById("Reference").value="";
+  render(); alert("Save ho gaya! Total ab: " + fatwas.length + " fatwe. Ab Nayi JSON wala button dabao");
+}
+function showJSON(){
+  if(!loaded){ alert("Pehle load hone do!"); return; }
+  const out = document.getElementById("jsonOutput");
+  out.style.display = "block";
+  document.getElementById("copyBtn").style.display = "block";
+  out.value = JSON.stringify(fatwas, null, 2);
+  out.select();
+  alert("Neeche poori " + fatwas.length + " fatwon wali JSON aa gayi hai. Copy Karo dabao.");
+}
+function copyJSON(){
+  const out = document.getElementById("jsonOutput");
+  out.select();
+  document.execCommand("copy");
+  alert("Copy ho gaya! Ab Acode me fatwas.json khol ke Select All > Paste > Save kar do.");
+}
+</script>
+</body>
+</html>
