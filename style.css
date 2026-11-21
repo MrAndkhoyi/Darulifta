@@ -6,9 +6,9 @@ header h1{font-size:25px;margin-bottom:2px}
     -webkit-background-clip: text;
     color: transparent;}
 main{max-width:850px;margin:18px auto;padding:0 12px}
-#search{width:100%;padding:6px;font-size:10px;border:1px solid #bbb;border-radius:7px;margin-bottom:1px; position:sticky;top:0; direction: rtl;}
+#search{width:100%;padding:6px;font-size:12px;border:1px solid #bbb;border-radius:7px;margin-bottom:1px; position:sticky;top:0; direction: rtl;}
 .categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.cat{border:1px solid #0d5d3f;background:white;color:#0d5d3f;border-radius:20px;padding:8px 14px;cursor:pointer;font-size:11px}
+.cat{border:1px solid #0d5d3f;background:white;color:#0d5d3f;border-radius:20px;padding:8px 14px;cursor:pointer;font-size:12px}
 .cat.active{background:#0d5d3f;color:white}
 .fatwa-item{background:white;border:1px solid #ddd;border-radius:8px;margin-bottom:10px;padding:14px;cursor:pointer;font-weight:bold;color:#164b37;width:100%;text-align:left;font-size:10px}
 .fatwa-item:active{background:#eef6f1}
@@ -16,9 +16,9 @@ main{max-width:850px;margin:18px auto;padding:0 12px}
 .fatwa-title{font-weight:bold;color:blue;font-size:13px;margin-bottom:10px}
 .answer{margin-top:12px;white-space:pre-line}
 .reference{margin-top:10px;font-size:10px;color:#555;border-top:1px solid #eee;padding-top:8px}
-#status{font-size:8px;color:#555;margin:8px 0 12px}
+#status{font-size:10px;color:#555;margin:8px 0 12px}
 #backBtn{background:#0d5d3f;color:white;border:none;padding:10px 16px;border-radius:7px;cursor:pointer;margin-bottom:12px;font-size:10px;display:none}
 .sticky{position:sticky;top:0}
 footer{text-align:center;color:#666;font-size:8px;padding:10px;position:sticky;bottom:0; background-color: white}
-  #waqt, #waqt2{font-size:5px}
+  #waqt, #waqt2{font-size:8px}
   h5{color: yellow;}
