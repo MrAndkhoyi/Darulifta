@@ -1,6 +1,39 @@
-setInterval(function(){
-  document.getElementById("waqt").innerHTML = "[" + new Date().toLocaleTimeString() + "] [" + new Date().toLocaleDateString() + "]";
-}, 1000);
+const dariMonths = [
+  "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله",
+  "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"
+];
+
+function getAfghanSolarDate(date) {
+  const parts = new Intl.DateTimeFormat("en-u-ca-persian", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric"
+  }).formatToParts(date);
+
+  const day = parts.find(p => p.type === "day").value;
+  const monthIndex = parseInt(parts.find(p => p.type === "month").value, 10) - 1;
+  const year = parts.find(p => p.type === "year").value;
+
+  return `${day} ${dariMonths[monthIndex]} ${year}`;
+}
+
+function updateWaqt() {
+  const now = new Date();
+  const time = now.toLocaleTimeString();
+  const greg = now.toLocaleDateString();
+  const hijriLunar = now.toLocaleDateString("ar-SA-u-ca-islamic-umalqura-nu-latn", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+  const hijriSolar = getAfghanSolarDate(now);
+
+  document.getElementById("waqt").textContent = `[${time}] [${greg}] [${hijriLunar}] [${hijriSolar}]`;
+}
+
+updateWaqt();
+setInterval(updateWaqt, 1000);
+
 
 let allFatwas = [];
 let selectedCategory = "All";
