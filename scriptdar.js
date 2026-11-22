@@ -1,17 +1,23 @@
-
 setInterval(function(){
   document.getElementById("waqt").innerHTML = "[" + new Date().toLocaleTimeString() + "] [" + new Date().toLocaleDateString() + "]";
-},1000);
+}, 1000);
 
 let allFatwas = [];
 let selectedCategory = "All";
 let openedId = null;
 
+const params = new URLSearchParams(window.location.search);
+const sharedFatwa = params.get("fatwa");
+
+if (sharedFatwa) {
+  openedId = sharedFatwa;
+}
+
 function getFiltered(){
   const query = document.getElementById("search").value.trim().toLowerCase();
   return allFatwas.filter(function(f){
     const matchCat = selectedCategory === "All" || f.Category === selectedCategory;
-    const matchSearch = String(f.FatwaID).includes(query) || String(f.Question).includes(query) || String(f.Answer).toLowerCase().includes(query);
+    const matchSearch = String(f.FatwaID).includes(query) || String(f.Question).includes(query) || String(f.Answer).includes(query) || String(f.qHeading).includes(query);
     return matchCat && matchSearch;
   });
 }
@@ -31,10 +37,10 @@ function renderFatwas(){
       box.className = "fatwa-box";
       const title = document.createElement("div");
       title.className = "fatwa-title";
-      title.textContent = "فتوی نمبر" + f.FatwaID +"—" + f.Question;
+      title.textContent = "فتوی نمبر " + f.FatwaID + " — " + f.Question;
       const answer = document.createElement("div");
       answer.className = "answer";
-      answer.textContent = "جواب:"+f.Answer;
+      answer.textContent = "جواب: " + f.Answer;
       const reference = document.createElement("div");
       reference.className = "reference";
       reference.textContent = "حواله: " + f.Reference;
@@ -42,23 +48,26 @@ function renderFatwas(){
       box.appendChild(answer);
       box.appendChild(reference);
       list.appendChild(box);
+      return;
+    } else {
+      openedId = null; // If fatwa ID not found, fall back to full list
     }
-    return;
   }
 
   // NAHI TO LIST DIKHAO - SIRF TITLE
   const filtered = getFiltered();
   backBtn.style.display = "none";
-  document.getElementById("status").textContent = filtered.length + " فتوی یافته شد";
+  document.getElementById("status").textContent = filtered.length + " fatwa(s) found - Click to open 1";
 
   filtered.forEach(function(f){
     const btn = document.createElement("button");
     btn.className = "fatwa-item";
-    btn.textContent = "فتوی نمبر" + f.FatwaID  + "— "+ f.Question;
+    btn.textContent = "فتوی نمبر " + f.FatwaID + " — " + f.qHeading;
     btn.onclick = function(){
       openedId = f.FatwaID;
+      history.replaceState(null, "", "?fatwa=" + f.FatwaID);
       renderFatwas();
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     };
     list.appendChild(btn);
   });
@@ -66,6 +75,7 @@ function renderFatwas(){
 
 document.getElementById("backBtn").onclick = function(){
   openedId = null;
+  history.replaceState(null, "", window.location.pathname);
   renderFatwas();
 };
 
@@ -73,6 +83,7 @@ document.getElementById("search").addEventListener("input", function(){
   openedId = null;
   renderFatwas();
 });
+
 document.querySelectorAll(".cat").forEach(function(button){
   button.addEventListener("click", function(){
     selectedCategory = button.dataset.cat;
